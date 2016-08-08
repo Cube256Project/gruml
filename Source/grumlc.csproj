@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <OutputPath>c:\users\tc\Projects\GRUML\Source</OutputPath>
+    <DefineConstants />
+    <CFSThirdPartyBinaries>c:\users\tc\Repositories\igra3\bin\static</CFSThirdPartyBinaries>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Web" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(CFSThirdPartyBinaries)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\BasicLogMessage.cs" />
+    <Compile Include="Common\ClassTrace.cs" />
+    <Compile Include="Common\ConsoleLogFollower.cs" />
+    <Compile Include="Common\DebugLogFollower.cs" />
+    <Compile Include="Common\HexDump.cs" />
+    <Compile Include="Common\ILogFollower.cs" />
+    <Compile Include="Common\ILogMessage.cs" />
+    <Compile Include="Common\ILogMessageFactory.cs" />
+    <Compile Include="Common\Log.cs" />
+    <Compile Include="Common\LogContext.cs" />
+    <Compile Include="Common\LogMessageExtensions.cs" />
+    <Compile Include="Common\LogMessageSubmitOptions.cs" />
+    <Compile Include="Common\LogPrinterFormat.cs" />
+    <Compile Include="Common\LogSeverity.cs" />
+    <Compile Include="Common\LogSourceAttribute.cs" />
+    <Compile Include="Common/ParserFramework\Predicate.cs" />
+    <Compile Include="Common/ParserFramework\ReductionRule.cs" />
+    <Compile Include="Common/ParserFramework\ReductionRuleCollection.cs" />
+    <Compile Include="Common/ParserFramework\ReductionStack.cs" />
+    <Compile Include="Common/Tokenization\TokenWriter.cs" />
+    <Compile Include="Common\ProcessRunner.cs" />
+    <Compile Include="Common\AssemblyExtensions.cs" />
+    <Compile Include="Common\Base32Encoding.cs" />
+    <Compile Include="Common\ByteArrayExtensions.cs" />
+    <Compile Include="Common\ConsoleWriter.cs" />
+    <Compile Include="Common\StreamExtensions.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
+    <Compile Include="Common\TypeSelector.cs" />
+    <Compile Include="Common\UniqueTimeSource.cs" />
+    <Compile Include="Common\WildcardFactory.cs" />
+    <Compile Include="Common/Tokenization\ExpressionFactory.cs" />
+    <Compile Include="Common/Tokenization\ITokenLocation.cs" />
+    <Compile Include="Common/Tokenization\LocationTracker.cs" />
+    <Compile Include="Common/Tokenization\SeparatorPriority.cs" />
+    <Compile Include="Common/Tokens\Token.cs" />
+    <Compile Include="Common/Tokenization\TokenExtensions.cs" />
+    <Compile Include="Common/Tokenization\TokenFactory.cs" />
+    <Compile Include="Common/Tokenization\TokenizerExtensions.cs" />
+    <Compile Include="Common/Tokenization\TokenizerReductionStack.cs" />
+    <Compile Include="Common/Tokenization\TokenizerRuleCollection.cs" />
+    <Compile Include="Common/Tokenization\TokenizerSettings.cs" />
+    <Compile Include="Common/Tokenization\TokenReader.cs" />
+    <Compile Include="Common/Tokenization\TokenTypeEnumerator.cs" />
+    <Compile Include="Common/Tokenization\TokenTypeInfo.cs" />
+    <Compile Include="Common/Tokenization/Attributes\RegularExpressionAttribute.cs" />
+    <Compile Include="Common/Tokenization/Locations\ImmutableTokenLocation.cs" />
+    <Compile Include="Common/Tokenization/Rules\CommentStartRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\EmailAddressRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\EmitRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\EntityReferenceRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\MultiLineCommentSuffixRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\QuoteStartRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\QuoteSuffixRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\SeparatorCoercionRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\SingleLineCommentSuffixRule.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\BasicRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\DefaultRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\MultiLineCommentRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\QuotedContentRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\SingleLineCommentRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\XmlRuleSet.cs" />
+    <Compile Include="Common/Tokens\Atomic.cs" />
+    <Compile Include="Common/Tokens\Brackets.cs" />
+    <Compile Include="Common/Tokens\Comments.cs" />
+    <Compile Include="Common/Tokens\Composite.cs" />
+    <Compile Include="Common/Tokens\CompositeStrings.cs" />
+    <Compile Include="Common/Tokens\FileDelimiters.cs" />
+    <Compile Include="Common/Tokens\Identifier.cs" />
+    <Compile Include="Common/Tokens\Numbers.cs" />
+    <Compile Include="Common/Tokens\Operators.cs" />
+    <Compile Include="Common/Tokens\Quotes.cs" />
+    <Compile Include="Common/Tokens\Separators.cs" />
+    <Compile Include="Common/Tokens\TokenClasses.cs" />
+    <Compile Include="Common/Tokens\Whitespace.cs" />
+    <Compile Include="Common/Tokens\XmlMarkup.cs" />
+    <Compile Include="Tools/GRUML\BindingParser.cs" />
+    <Compile Include="Tools/GRUML\DocumentConverter.cs" />
+    <Compile Include="Tools/GRUML\DocumentReader.cs" />
+    <Compile Include="Tools/GRUML\ResourceTag.cs" />
+    <Compile Include="Tools/GRUML/Converters\BindingConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\ControlDefinitionConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\ControlElementConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\DataTemplateConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\ElementConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\HtmlElementConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\ProjectConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\ResourceDictionaryConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\TemplateElementConverter.cs" />
+    <Compile Include="Tools/GRUML/Converters\TextElementConverter.cs" />
+    <Compile Include="Tools/GRUML/Model\Binding.cs" />
+    <Compile Include="Tools/GRUML/Model\BindingSyntax.cs" />
+    <Compile Include="Tools/GRUML/Model\CascadingStyleSheet.cs" />
+    <Compile Include="Tools/GRUML/Model\ClassElement.cs" />
+    <Compile Include="Tools/GRUML/Model\ContainerElement.cs" />
+    <Compile Include="Tools/GRUML/Model\ControlDefinition.cs" />
+    <Compile Include="Tools/GRUML/Model\ControlElement.cs" />
+    <Compile Include="Tools/GRUML/Model\ControlScriptElement.cs" />
+    <Compile Include="Tools/GRUML/Model\DataTemplate.cs" />
+    <Compile Include="Tools/GRUML/Model\DictionaryElement.cs" />
+    <Compile Include="Tools/GRUML/Model\Element.cs" />
+    <Compile Include="Tools/GRUML/Model\ExternalScriptElement.cs" />
+    <Compile Include="Tools/GRUML/Model\HtmlAttribute.cs" />
+    <Compile Include="Tools/GRUML/Model\HtmlElement.cs" />
+    <Compile Include="Tools/GRUML/Model\Include.cs" />
+    <Compile Include="Tools/GRUML/Model\Page.cs" />
+    <Compile Include="Tools/GRUML/Model\Project.cs" />
+    <Compile Include="Tools/GRUML/Model\Resource.cs" />
+    <Compile Include="Tools/GRUML/Model\ResourceDictionary.cs" />
+    <Compile Include="Tools/GRUML/Model\ScriptElement.cs" />
+    <Compile Include="Tools/GRUML/Model\StaticResource.cs" />
+    <Compile Include="Tools/GRUML/Model\TemplateElement.cs" />
+    <Compile Include="Tools/GRUML/Model\TextElement.cs" />
+    <Compile Include="Tools/GRUML/Model\TypeScriptUnit.cs" />
+    <Compile Include="Tools/GRUML/Bindings\AssignmentRule.cs" />
+    <Compile Include="Tools/GRUML/Bindings\BindingSyntaxReductionRule.cs" />
+    <Compile Include="Tools/GRUML/Bindings\BindingSyntaxReductionRules.cs" />
+    <Compile Include="Tools/GRUML/Bindings\ConcatenationRule.cs" />
+    <Compile Include="Tools/GRUML/Bindings\EndRule.cs" />
+    <Compile Include="Tools/GRUML/Bindings\StartRule.cs" />
+    <EmbeddedResource Include="Tools\GRUML\Library\BindingBase.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\BindingElement.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\BindingObject.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\BindingOperations.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ContentPresenter.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\Control.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\DataTemplateSelector.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\Delegate.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\DependencyObject.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\DOMBinding.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\Interfaces.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ItemsControl.ts" />
+    <Compile Include="Tools/GRUML\Library.cs" />
+    <EmbeddedResource Include="Tools\GRUML\Library\Library.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ObjectBinding.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ObservableCollection.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\page-template.xml" />
+    <EmbeddedResource Include="Tools\GRUML\Library\Page.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ResourceBinding.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\ResourceDictionary.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\TypeSystem.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\UserLog.ts" />
+    <Compile Include="Tools/GRUML\Utility.cs" />
+    <Compile Include="Tools/GRUML/Configuration\TypeScriptConfiguration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="grumlc.AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
