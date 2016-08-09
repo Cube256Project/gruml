@@ -4,8 +4,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <OutputPath>..\output</OutputPath>
     <DefineConstants />
-    <CFSThirdPartyBinaries>c:\users\tc\Repositories\igra3\bin\static</CFSThirdPartyBinaries>
-    <ProjectGuid>{6ED49F2A-0556-4B66-8951-6D71AA04301E}</ProjectGuid>
+    <ProjectGuid>{4BF9A23B-1BC5-4B1F-A90D-BC5CE85EDEE3}</ProjectGuid>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>

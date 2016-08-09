@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{0A10AF8B-546A-46FB-91FA-5ADE9BDEA726}") = "grumlc", "Source\grumlc.csproj", "{6ED49F2A-0556-4B66-8951-6D71AA04301E}"
+Project("{C1FD6475-2DB2-418D-8EB4-5EEE4D63FAD9}") = "grumlc", "Source\grumlc.csproj", "{4BF9A23B-1BC5-4B1F-A90D-BC5CE85EDEE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6ED49F2A-0556-4B66-8951-6D71AA04301E}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{6ED49F2A-0556-4B66-8951-6D71AA04301E}.Debug|Any CPU.Build.0 = Debug|x86
+		{4BF9A23B-1BC5-4B1F-A90D-BC5CE85EDEE3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4BF9A23B-1BC5-4B1F-A90D-BC5CE85EDEE3}.Debug|Any CPU.Build.0 = Debug|x86
 	EndGlobalSection
 EndGlobal
