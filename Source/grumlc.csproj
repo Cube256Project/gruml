@@ -2,26 +2,23 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <OutputPath>c:\users\tc\Projects\GRUML\Source</OutputPath>
+    <OutputPath>..\output</OutputPath>
     <DefineConstants />
     <CFSThirdPartyBinaries>c:\users\tc\Repositories\igra3\bin\static</CFSThirdPartyBinaries>
+    <ProjectGuid>{6ED49F2A-0556-4B66-8951-6D71AA04301E}</ProjectGuid>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Core" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Web" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System.Xaml" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(CFSThirdPartyBinaries)\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json.dll">
+      <HintPath>..\Packages\Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\BasicLogMessage.cs" />
@@ -169,7 +166,7 @@
     <Compile Include="Tools/GRUML/Configuration\TypeScriptConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="grumlc.AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.grumlc.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
