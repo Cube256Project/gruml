@@ -67,11 +67,14 @@ namespace Common.Tokens
         { }
     }
 
-    public sealed class UrlString : SeparatedString, InternetString
+    public sealed class UrlString : Composite, InternetString
     {
-        public UrlString(IEnumerable<Token> tokens)
-            : base(tokens)
-        { }
+        public UrlString(IEnumerable<Token> tokens) : base(tokens) { }
+
+        public void Extend(params Token[] tokens)
+        {
+            SetElements(Elements.Concat(tokens));
+        }
     }
 
     public sealed class EmailAddress : Composite, InternetString

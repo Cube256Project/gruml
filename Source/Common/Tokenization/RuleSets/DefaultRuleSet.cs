@@ -15,6 +15,7 @@ namespace Common.Tokenization.RuleSets
 
             yield return new SeparatorCoercionRule();
             yield return new EmailAddressRule();
+            yield return new UrlSeparatorRule();
             yield return new CommentStartRule();
             yield return new EmitRule();
         }

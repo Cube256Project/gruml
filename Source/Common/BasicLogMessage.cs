@@ -1,33 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;  
 
 namespace Common
 {
-    class BasicLogMessage : ILogMessage
+    class BasicLogMessage : ILogMessageTemplate, ILogMessage
     {
         #region Private
 
-        private StringBuilder _text;
+        private List<ILogMessageContent> _content = new List<ILogMessageContent>();
 
         #endregion
 
         #region Properties
 
-        public string ID { get; private set; }
+        public string Key { get; private set; }
 
         public string EventCode { get; set; }
 
         public DateTime EventTime { get; set; }
 
+        public string Origin { get; set; }
+
         public LogSeverity Severity { get; set; }
 
         public string Header { get; set; }
 
-        public string Body { get { return null == _text ? null : _text.ToString(); } }
+        /// <summary>
+        /// Reference to the source code making this log.
+        /// </summary>
+        public string Source { get; set; }
+
+        public ILogMessageContent[] Body { get { return _content.ToArray(); } }
 
         public object[] Context { get; set; }
+
+        public long Sequence { get; set; }
 
         #endregion
 
@@ -41,33 +52,20 @@ namespace Common
             // TODO: CTRMIEWANN: this is only one option to do it.
             var id = new byte[32];
             RandomNumberGenerator.Create().GetBytes(id);
-            ID = id.ToBase32();
+            Key = id.ToBase32();
+
+            Origin = "machine:" + Environment.MachineName + ":pid:" + Process.GetCurrentProcess().Id;
         }
 
         #endregion
+
+        #region Public Methods
 
         public void AddData(object obj)
         {
             if (null != obj)
             {
-                if (null == _text) _text = new StringBuilder();
-
-                if (obj is string)
-                {
-                    _text.Append((string)obj);
-                }
-                else if (obj is byte[])
-                {
-                    _text.Append(HexDump.Convert((byte[])obj));
-                }
-                else if (obj is StringBuilder)
-                {
-                    _text.Append(obj.ToString());
-                }
-                else
-                {
-                    _text.Append("[" + obj.GetType().AssemblyQualifiedName + "]");
-                }
+                _content.Add(new LogContentConverter().ConvertToLogContent(obj));
             }
         }
 
@@ -76,13 +74,33 @@ namespace Common
             Context = Context.Concat(new[] { obj }).ToArray();
         }
 
+        public ILogMessage Commit()
+        {
+            EnsureEventTime();
+            return this;
+        }
+
         public void Submit()
         {
-            // CTRMIEWANN: integration optional?
-            EventTime = UniqueTimeSource.GetUniqueTime();
+            EnsureEventTime();
 
             // submit to current context.
             LogContext.Current.Submit(this);
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void EnsureEventTime()
+        {
+            if (EventTime == default(DateTime))
+            {
+                // CTRMIEWANN: integration optional?
+                EventTime = UniqueTimeSource.GetUniqueTime();
+            }
+        }
+
+        #endregion
     }
 }

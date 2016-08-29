@@ -79,7 +79,25 @@ namespace Common
             {
                 _writer.WriteLine();
                 _writer.Indent();
-                _writer.WriteMultiLine(log.Body);
+                //
+
+                foreach (var body in log.Body)
+                {
+                    var content = body.Content;
+                    if (content is string)
+                    {
+                        _writer.WriteMultiLine((string)content);
+                    }
+                    else if (content is byte[])
+                    {
+                        _writer.WriteMultiLine(HexDump.Convert((byte[])content));
+                    }
+                    else
+                    {
+                        // TODO: warn?
+                    }
+                }
+
                 _writer.Unindent();
                 _writer.WriteLine();
             }

@@ -1,3 +1,3 @@
 @echo off
 nuget install
-msbuild
+msbuild /nologo /v:m

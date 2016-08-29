@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace GRUML.Converters
 {
+    /// <summary>
+    /// Generates JScript for a HTML element.
+    /// </summary>
     abstract class TemplateElementConverter : ElementConverter
     {
         private ContainerElement _e;
@@ -21,11 +24,11 @@ namespace GRUML.Converters
             // create DOM element
             if (null == ns)
             {
-                Writer.WriteLine("e = document.createElement(" + tag.Quote() + ");");
+                Writer.WriteLine("e = document.createElement(" + tag.CQuote() + ");");
             }
             else
             {
-                Writer.WriteLine("e = document.createElementNS(" + ns.Quote() + ", " + tag.Quote() + ");");
+                Writer.WriteLine("e = document.createElementNS(" + ns.CQuote() + ", " + tag.CQuote() + ");");
             }
 
             // append it to the current container
@@ -60,7 +63,7 @@ namespace GRUML.Converters
             if (null != _e.Dictionary)
             {
                 // WXQ7XZ4EKL: associate resource dictionary with DOM element.
-                Writer.WriteLine("e.setAttribute('__dict', " + _e.Dictionary.UniqueName.Quote() + ");");
+                Writer.WriteLine("e.setAttribute('__dict', " + _e.Dictionary.UniqueName.CQuote() + ");");
             }
         }
 
@@ -121,7 +124,16 @@ namespace GRUML.Converters
 
         protected virtual void ConvertStaticAttribute(StaticAttribute a)
         {
-            Writer.WriteLine("e.setAttribute(" + a.Name.Quote() + ", " + a.Value.Quote() + ");");
+            var name = a.Name;
+            if (name.StartsWith("data-"))
+            {
+                // 27CLJ3C7VA: data- attribute are assigned to the DOM object ...
+                Writer.WriteLine("e[" + name.CQuote() + "] = " + a.Value.CQuote() + ";");
+            }
+            else
+            {
+                Writer.WriteLine("e.setAttribute(" + a.Name.CQuote() + ", " + a.Value.CQuote() + ");");
+            }
         }
 
         protected void ForAllElements(Element e, Action<Element> action)

@@ -54,6 +54,8 @@ class BindingElement {
         // read value
         this._value = this._source[this._prop];
 
+        // UserLog.Trace("[BindingElement] prop " + this._prop + " == " + this._value);
+
         // is INotifyPropertyChanged supported?
         if (sourcechanged && !!this._source["addPropertyChanged"]) {
 

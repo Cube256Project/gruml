@@ -68,6 +68,9 @@ namespace GRUML.Model
                 {
                     foreach (var subdir in Directory.GetDirectories(path))
                     {
+                        var name = Path.GetFileName(subdir);
+                        if (name == "output") continue;
+
                         Recurse(subdir, filter, maxdepth - 1);
                     }
                 }
@@ -79,7 +82,7 @@ namespace GRUML.Model
             }
             else if (File.Exists(path))
             {
-                if (filter.IsMatch(path))
+                if (filter.IsMatch(Path.GetFileName(path)))
                 {
                     if (Context.SetFileProcessed(path))
                     {
@@ -95,7 +98,14 @@ namespace GRUML.Model
             switch (ext)
             {
                 case ".xml":
-                    LoadXml(path);
+                    if (Path.GetFileName(path) == "gruml.xml")
+                    {
+                        Log.Debug("not loading nested definition file {0}.", path);
+                    }
+                    else
+                    {
+                        LoadXml(path);
+                    }
                     break;
 
                 case ".ts":

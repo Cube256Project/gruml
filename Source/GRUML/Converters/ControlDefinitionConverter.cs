@@ -27,6 +27,82 @@ namespace GRUML.Converters
 
             // control definition, extend control or specified type
             Writer.WriteLine("// [control] " + _e.SequenceNumber);
+
+            // header
+            EmitClassHeader();
+
+            // class body
+            Writer.WriteLine(" {");
+            Writer.Indent();
+
+            // $type indication needed for JSON.
+            Writer.WriteLine("$type: string = " + _e.Name.Quote() + ";");
+
+            // named elements declarations
+            EmitElementDeclarations();
+
+            // constructor
+            Writer.WriteLine("constructor() { super(); }");
+            Writer.WriteLine();
+
+            // bindings
+            EmitClassBindings();
+
+            // render
+            Writer.WriteLine("protected render(e: any): void {");
+            BeginRender();
+
+            ConvertAfterContainerAppended();
+
+            Writer.WriteLine("let dc = this.dc;");
+            Writer.WriteLine("let self = this;");
+
+            // Writer.WriteLine("UserLog.Trace('render: ' + " + _e.Name.Quote() + " + ' dc ' + dc);");
+
+            // install a callback to reach control from the visual tree (DOM)
+            Writer.WriteLine("e['__control'] = function() { return self; };");
+
+            Writer.WriteLine("// definition elements ..");
+
+            // convert nested elements
+            ConvertElements();
+
+            EndRender();
+
+            // custom code
+            EmitScriptCode();
+
+            Writer.UnIndent();
+            Writer.WriteLine("}");
+        }
+
+        private void EmitClassBindings()
+        {
+            var commandbindings = _e.EventBindings.OfType<CommandBinding>().Where(b => null != b.ExecuteHandler);
+
+            if(commandbindings.Any())
+            {
+                Writer.WriteLine("protected ExecuteRoutedCommand(command: string, p: any): void");
+                EnterBlock();
+
+                Writer.WriteLine("switch(command)");
+                EnterBlock();
+
+                foreach (var cb in commandbindings)
+                {
+                    Writer.WriteLine("case " + cb.Command.CQuote() + ": this." + cb.ExecuteHandler + "(p); return true;");
+                }
+
+                Writer.WriteLine("default: return false;");
+
+                LeaveBlock();
+                LeaveBlock();
+                Writer.WriteLine();
+            }
+        }
+
+        private void EmitClassHeader()
+        {
             Writer.Write("class " + _e.Name);
 
             string basetype;
@@ -44,41 +120,6 @@ namespace GRUML.Converters
             }
 
             Writer.Write(" extends " + basetype);
-
-            // class body
-            Writer.WriteLine(" {");
-            Writer.Indent();
-
-            // TODO: '$type' is obsolete!?
-            Writer.WriteLine("$type: string = " + _e.Name.Quote() + ";");
-
-            // named elements declarations
-            EmitElementDeclarations();
-
-            // constructor
-            Writer.WriteLine("constructor() { super(); }");
-
-            Writer.WriteLine("protected render(e: any): void {");
-            BeginRender();
-
-            ConvertAfterContainerAppended();
-
-            Writer.WriteLine("let dc = this.dc;");
-            Writer.WriteLine("let self = this;");
-
-            // Writer.WriteLine("UserLog.Trace('render: ' + " + _e.Name.Quote() + " + ' dc ' + dc);");
-
-            Writer.WriteLine("// definition elements ..");
-
-            ConvertElements();
-
-            EndRender();
-
-            // custom code
-            EmitScriptCode();
-
-            Writer.UnIndent();
-            Writer.WriteLine("}");
         }
 
         private void EmitScriptCode()

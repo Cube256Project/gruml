@@ -47,7 +47,7 @@ namespace Common.Tokenization
 
         public void WriteLine(string text)
         {
-            Write(text);
+            if(null != text) Write(text);
             WriteLine();
         }
 

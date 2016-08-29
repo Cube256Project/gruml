@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Common
 {
     public class ProcessRunner : IDisposable
     {
         private Process _process;
+        private List<string> _envpath = new List<string>();
 
         public Process Process { get { return _process; } }
 
@@ -34,6 +36,8 @@ namespace Common
             info.RedirectStandardOutput = true;
             info.CreateNoWindow = true;
 
+            InstallEnvironmentPath(info);
+
             SetupProcessInfo(info);
 
             _process = new Process();
@@ -44,6 +48,17 @@ namespace Common
             _process.Start();
 
             StartIO();
+        }
+
+        private void InstallEnvironmentPath(ProcessStartInfo info)
+        {
+            var pathstring = info.EnvironmentVariables["PATH"] ?? "";
+            var pathlist = pathstring.Split(';');
+
+            /*foreach (var path in pathlist)
+            {
+                Log.Debug("  {0}", path);
+            }*/ 
         }
 
         protected virtual void SetupProcessInfo(ProcessStartInfo info)

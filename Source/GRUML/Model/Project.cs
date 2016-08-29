@@ -17,6 +17,15 @@ namespace GRUML.Model
 
         public List<Page> Pages = new List<Page>();
 
+        public string BundleName { get; private set; }
+
+        public bool UseLibrary { get; private set; }
+
+        public Project()
+        {
+            UseLibrary = true;
+        }
+
         /// <summary>
         /// Default control.
         /// </summary>
@@ -27,6 +36,16 @@ namespace GRUML.Model
             if (e.HasAttribute("default"))
             {
                 DefaultControlType = e.GetAttribute("default");
+            }
+
+            if (e.HasAttribute("bundle"))
+            {
+                BundleName = e.GetAttribute("bundle");
+            }
+
+            if(e.HasAttribute("nolib"))
+            {
+                UseLibrary = false;
             }
 
             return base.Load(e);

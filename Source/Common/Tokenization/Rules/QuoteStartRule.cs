@@ -15,6 +15,7 @@ namespace Common.Tokenization.Rules
             {
                 var xml = stack.Top is XmlRuleSet;
 
+                // WEKKX4UYXK: switch into quoted content rules
                 stack.PushRules(new QuotedContentRuleSet(quote, xml));
                 stack.EndReduce();
                 return true;

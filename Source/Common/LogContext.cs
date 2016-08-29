@@ -22,8 +22,14 @@ namespace Common
 
         #region Properties
 
+        /// <summary>
+        /// Global log context.
+        /// </summary>
         public static readonly LogContext Default = new LogContext(true);
 
+        /// <summary>
+        /// The current log context.
+        /// </summary>
         public static LogContext Current { get { return _current.Value; } }
 
         public static IEnumerable<object> Context
@@ -70,7 +76,14 @@ namespace Common
             : this(false)
         {
             _previous = _current.Value;
+
+            // at least the default is always there
+            Debug.Assert(null != _previous);
+
+            // push onto context stack
             _current.Value = this;
+
+            // specifier
             _arguments = context;
 
             // see if trace enabled for any of the arguments ...

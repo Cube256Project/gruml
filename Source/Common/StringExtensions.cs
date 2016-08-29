@@ -8,7 +8,8 @@ namespace Common
     public enum QuoteFormat
     {
         SingleQuoteEscapeDuplicate,
-        DoubleQuoteEscapeDuplicate
+        DoubleQuoteEscapeDuplicate,
+        DoubleQuoteCStyle
     }
 
     public static class StringExtensions
@@ -16,28 +17,36 @@ namespace Common
         /// <summary>
         /// Combines a list of object string values into a separated string.
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">If null or empty, the empty string is returned.</param>
         /// <param name="sep"></param>
         /// <returns>The combined string.</returns>
         public static string ToSeparatorList(this IEnumerable<object> list, string sep = ", ")
         {
             var sb = new StringBuilder();
-            foreach (var s in list)
+            if (null != list)
             {
-                if (0 < sb.Length) sb.Append(sep);
-                sb.AppendFormat("{0}", s);
+                foreach (var s in list)
+                {
+                    if (0 < sb.Length) sb.Append(sep);
+                    sb.AppendFormat("{0}", s);
+                }
             }
+
             return sb.ToString();
         }
 
         public static string ToSeparatorList(this IEnumerable<object> list, char sep)
         {
             var sb = new StringBuilder();
-            foreach (var s in list)
+            if (null != list)
             {
-                if (0 < sb.Length) sb.Append(sep);
-                sb.AppendFormat("{0}", s);
+                foreach (var s in list)
+                {
+                    if (0 < sb.Length) sb.Append(sep);
+                    sb.AppendFormat("{0}", s);
+                }
             }
+
             return sb.ToString();
         }
 
@@ -76,6 +85,35 @@ namespace Common
             {
                 return "\"" + s.Replace("\"", "\"\"") + "\"";
             }
+            else if (format == QuoteFormat.DoubleQuoteCStyle)
+            {
+                var output = new StringBuilder();
+                output.Append('\"');
+                foreach (var c in s)
+                {
+                    switch(c)
+                    {
+                        case '\"':
+                            output.Append("\\\"");
+                            break;
+
+                        case '\r':
+                            output.Append("\\r");
+                            break;
+
+                        case '\n':
+                            output.Append("\\n");
+                            break;
+
+                        default:
+                            output.Append(c);
+                            break;
+                    }
+                }
+
+                output.Append('\"');
+                return output.ToString();
+            }
             else
             {
                 throw new ArgumentException("invalid format parameter.");
@@ -85,6 +123,11 @@ namespace Common
         public static string QuoteHeavy(this string s)
         {
             return Quote(s, QuoteFormat.DoubleQuoteEscapeDuplicate);
+        }
+
+        public static string CQuote(this string s)
+        {
+            return Quote(s, QuoteFormat.DoubleQuoteCStyle);
         }
     }
 }

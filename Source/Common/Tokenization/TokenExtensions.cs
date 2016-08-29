@@ -13,11 +13,12 @@ namespace Common.Tokenization
         /// <param name="selector">Selects the tokens to decompose.</param>
         /// <param name="maxdepth">Maximum nesting level.</param>
         /// <returns>The decomposed token sequence.</returns>
-        public static IEnumerable<Token> Expand(this IEnumerable<Token> tokens, TypeSelector selector, int maxdepth = int.MaxValue)
+        public static IEnumerable<Token> Expand(this IEnumerable<Token> tokens, TypeSelector selector = null, int maxdepth = int.MaxValue)
         {
             foreach (var t in tokens)
             {
-                if (t is Composite && selector(t.GetType()) && maxdepth > 0)
+                var activeselector = selector ?? new TypeSelector(a => true);
+                if (t is Composite && activeselector(t.GetType()) && maxdepth > 0)
                 {
                     var composite = (Composite)t;
                     foreach (var e in composite.Elements.Expand(selector, maxdepth - 1))
@@ -32,9 +33,9 @@ namespace Common.Tokenization
             }
         }
 
-        public static IEnumerable<Token> ToElements(this Token token)
+        public static IEnumerable<Token> ToElements(this Token token, TypeSelector selector = null)
         {
-            return new[] { token }.Expand(t => true);
+            return new[] { token }.Expand(selector);
         }
 
         public static IEnumerable<Token> Content(this IEnumerable<Token> tokens)

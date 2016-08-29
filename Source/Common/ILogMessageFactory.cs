@@ -3,6 +3,6 @@ namespace Common
 {
     public interface ILogMessageFactory
     {
-        ILogMessage CreateMessage();
+        ILogMessageTemplate CreateMessage();
     }
 }

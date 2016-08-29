@@ -8,8 +8,8 @@ namespace GRUML.Bindings
     {
         private static readonly Predicate[] Pattern = new Predicate[]
         {
-            ExactType(typeof(BindingSyntax)),
-            ExactType(typeof(CommaSeparator)),
+            ClassType(typeof(BindingSyntax)),
+            ClassType(typeof(CommaSeparator)),
         };
 
         public override bool Apply(ReductionStack s, object la)

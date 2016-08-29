@@ -63,7 +63,10 @@ namespace GRUML
                 SetFileProcessed(uri.LocalPath);
             }
 
+            Log.Debug("loading top level {0} ...", uri.ToString().Quote());
+
             var dom = new XmlDocument();
+            dom.PreserveWhitespace = true;
             dom.Load(uri.ToString());
             return Load(dom);
         }
@@ -123,9 +126,13 @@ namespace GRUML
                         {
                             u = Load((XmlText)child);
                         }
-                        else if(child is XmlComment)
+                        else if (child is XmlComment)
                         {
                             // ignore
+                            continue;
+                        }
+                        else if (child is XmlWhitespace)
+                        {
                             continue;
                         }
                         else
@@ -177,7 +184,7 @@ namespace GRUML
                     break;
 
                 case ReaderState.project:
-                    if (e is Include)
+                    if (e is Include || e is StyleSheetReference)
                     {
                         result = true;
                     }
@@ -211,6 +218,10 @@ namespace GRUML
                         result = true;
                     }
                     else if (e is ScriptElement && State == ReaderState.control)
+                    {
+                        result = true;
+                    }
+                    else if (e is CommandBinding && State == ReaderState.control)
                     {
                         result = true;
                     }
@@ -269,6 +280,10 @@ namespace GRUML
                         result = new ControlScriptElement();
                         break;
 
+                    case "style":
+                        result = new StyleSheetReference(e);
+                        break;
+
                     case "project":
                         result = new Project();
                         break;
@@ -283,6 +298,10 @@ namespace GRUML
 
                     case "resource":
                         result = new Resource();
+                        break;
+
+                    case "CommandBinding":
+                        result = new CommandBinding();
                         break;
 
                     default:

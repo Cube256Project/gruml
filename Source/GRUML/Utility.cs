@@ -35,7 +35,12 @@ namespace GRUML
 
         public Assembly Library { get; set; }
 
+        public string BundleName { get; private set; }
+
+        public bool UseLibrary { get { return null == Project ? true : Project.UseLibrary; } }
+
         public List<string> StyleSheets = new List<string>();
+        private bool Verbose;
 
         #endregion
 
@@ -90,33 +95,65 @@ namespace GRUML
             SetupOutputDirectory();
 
             // convert project
-            var writer = ConvertProject();
-
-            var outputscript = Path.Combine(StageDirectory, "generated-output.ts");
-            File.WriteAllText(outputscript, writer.Text);
+            GenerateCode();
 
             // generate tsconfig.json ...
             var tsc = new TypeScriptConfiguration();
-            tsc.compilerOptions.outFile = Path.Combine(OutputDirectory, "bundle.js");
-            //tsc.files = null;
-            tsc.files.Add("Library.ts");
+
+            var bundlename = null == Project ? null : Project.BundleName;
+            BundleName = bundlename ?? "bundle.js";
+
+            tsc.compilerOptions.outFile = Path.Combine(OutputDirectory, BundleName);
+
+            if (UseLibrary)
+            {
+                tsc.files.Add("Library.ts");
+                InstallLibrary(Library);
+            }
+
             tsc.files.Add("generated-output.ts");
 
-            InstallLibrary(Library);
 
             WriteTypeScriptSettings(tsc);
+
+            var appdir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            Log.Debug("looking for NPM in {0} ...", appdir.Quote());
+
+            var tooloutput = new TokenWriter();
 
             Log.Debug("converting typescript ...");
             var pr = new ProcessRunner();
             pr.WorkingDirectory = StageDirectory;
-            pr.FileName = @"C:\Users\tc\AppData\Roaming\npm\tsc.cmd";
+            pr.FileName = Path.Combine(appdir, @"npm\tsc.cmd");
+            pr.OnOutput += (sender, e) => tooloutput.WriteLine("> " + e.Data);
             pr.Start();
-            Log.Debug("typescript => {0}", pr.Wait());
+
+            var exitcode = pr.Wait();
+            Log.Debug("typescript => {0}", exitcode);
+            if (0 != exitcode)
+            {
+                Log.Debug("{0}", tooloutput.Text);
+            }
+
 
             // index template
             if (null != Project)
             {
                 EmitPages();
+            }
+        }
+
+        private void GenerateCode()
+        {
+            var writer = ConvertProject();
+
+            var outputscript = Path.Combine(StageDirectory, "generated-output.ts");
+            File.WriteAllText(outputscript, writer.Text);
+
+            if (Verbose)
+            {
+                Log.Debug("generated code: {0}", writer.Text);
             }
         }
 
@@ -147,8 +184,11 @@ namespace GRUML
         {
             // generate typescript code 
             var writer = new TokenWriter();
+            var includes = new List<string>();
 
-            var defaultincludes = new string[]
+            if (UseLibrary)
+            {
+                var defaultincludes = new string[]
             {
                 "TypeSystem.ts",
                 "ResourceDictionary.ts",
@@ -158,7 +198,8 @@ namespace GRUML
                 "BindingOperations.ts"
             };
 
-            var includes = new List<string>(defaultincludes);
+                includes.AddRange(defaultincludes);
+            }
 
             if (null != Project)
             {
@@ -181,6 +222,10 @@ namespace GRUML
                         var dest = Path.Combine(OutputDirectory, script.FileName);
                         File.WriteAllText(dest, script.Code);
 
+                        StyleSheets.Add(script.FileName);
+                    }
+                    else if (script is StyleSheetReference)
+                    {
                         StyleSheets.Add(script.FileName);
                     }
                     else
@@ -229,22 +274,8 @@ namespace GRUML
 
                 var output = Path.Combine(OutputDirectory, page.Name + ".html");
 
-                var stylenode = dom.SelectSingleNode("//z:style", nm);
-                if (null == stylenode)
-                {
-                    throw new Exception("unable to inject 'z:style' was not found.");
-                }
-
-                foreach (var style in StyleSheets)
-                {
-                    var link = dom.CreateElement("link");
-                    link.SetAttribute("rel", "stylesheet");
-                    link.SetAttribute("href", style);
-                    stylenode.ParentNode.InsertAfter(link, stylenode);
-                }
-
-                stylenode.ParentNode.RemoveChild(stylenode);
-
+                InjectStyle(dom, nm);
+                InjectScript(dom, nm);
 
                 var node = dom.SelectSingleNode("//z:main", nm);
                 if (null == node)
@@ -272,6 +303,40 @@ namespace GRUML
 
                 Log.Debug("page {0} created.", output.Quote());
             }
+        }
+
+        private void InjectStyle(XmlDocument dom, XmlNamespaceManager nm)
+        {
+            var stylenode = dom.SelectSingleNode("//z:style", nm);
+            if (null == stylenode)
+            {
+                throw new Exception("unable to inject 'z:style' was not found.");
+            }
+
+            foreach (var style in StyleSheets)
+            {
+                var link = dom.CreateElement("link");
+                link.SetAttribute("rel", "stylesheet");
+                link.SetAttribute("href", style);
+                stylenode.ParentNode.InsertAfter(link, stylenode);
+            }
+
+            stylenode.ParentNode.RemoveChild(stylenode);
+        }
+
+        private void InjectScript(XmlDocument dom, XmlNamespaceManager nm)
+        {
+            var stylenode = dom.SelectSingleNode("//z:script", nm);
+            if (null == stylenode)
+            {
+                throw new Exception("unable to inject 'z:script' was not found.");
+            }
+
+            var script = dom.CreateElement("script");
+            script.SetAttribute("src", BundleName);
+            script.InnerText = " ";
+
+            stylenode.ParentNode.ReplaceChild(script, stylenode);
         }
 
         private void SetupOutputDirectory()
@@ -324,7 +389,7 @@ namespace GRUML
         {
             if (null == StageDirectory)
             {
-                StageDirectory = Path.Combine(InputDirectory, "__stage");
+                StageDirectory = FileSystemUtilities.CreateTemporaryDirectory();
             }
 
             if (Directory.Exists(StageDirectory))
@@ -358,6 +423,7 @@ namespace GRUML
                         else if (a == "-v" || a == "--verbose")
                         {
                             Log.DefaultMinimumSeverity = LogSeverity.unspecified;
+                            Verbose = true;
                         }
                         else
                         {

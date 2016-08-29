@@ -37,13 +37,14 @@ namespace Common.Tokenization.RuleSets
                 yield return new EntityReferenceRule();
             }
 
-            foreach(var e in base.Select(stack, lookahead))
+            /*foreach(var e in base.Select(stack, lookahead))
             {
+                if(e is QuoteStartRule)
                 if (!(e is QuoteStartRule))
                 {
                     yield return e;
                 }
-            }
+            }*/ 
         }
     }
 }

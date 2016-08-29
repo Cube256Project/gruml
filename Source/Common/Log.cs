@@ -26,11 +26,31 @@ namespace Common
         /// </summary>
         /// <returns>The log message.</returns>
         /// <remarks>After filling properties, the message must be submitted.</remarks>
-        public static ILogMessage Create()
+        public static ILogMessageTemplate Create()
         {
             var log = null == Factory ? new BasicLogMessage() : Factory.CreateMessage();
             log.SerializeContext(LogContext.Context);
             return log;
+        }
+
+        public static ILogMessageTemplate CreateDebug()
+        {
+            return Create().WithSeverity(LogSeverity.debug);
+        }
+
+        public static ILogMessageTemplate CreateWarning()
+        {
+            return Create().WithSeverity(LogSeverity.warning);
+        }
+
+        public static ILogMessageTemplate CreateError()
+        {
+            return Create().WithSeverity(LogSeverity.error);
+        }
+
+        public static ILogMessageTemplate CreateInformation()
+        {
+            return Create().WithSeverity(LogSeverity.information);
         }
 
         public static void Trace(string format, params object[] args)

@@ -11,7 +11,7 @@ namespace Common.Tokens
         string Value { get; }
     }
 
-    public interface InternetString : TokenClass { }
+    public interface InternetString : GeneralString { }
 
     interface NonDefault : TokenClass { }
 

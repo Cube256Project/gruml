@@ -42,7 +42,7 @@ namespace Common.Tokenization
         {
             if (base.ApplyRule(rule, lookahead))
             {
-                // Log.Trace("\n\tapplied {0}: {1}\n", rule.Name, this.ToSeparatorList("|"));
+                Parent.Trace("applied rule [{0,20}] to stack |{1}|", rule.Name, this.ToSeparatorList("|"));
                 return true;
             }
             else

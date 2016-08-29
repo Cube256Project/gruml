@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace Common
 {
@@ -51,7 +52,9 @@ namespace Common
             }
             else
             {
-                Debug.WriteLine(log.Header);
+                //var line = Thread.CurrentThread.ManagedThreadId + ": " + log.Header;
+                var line = log.Header;
+                Debug.WriteLine(line);
             }
         }
     }

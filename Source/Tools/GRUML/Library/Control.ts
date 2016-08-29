@@ -1,4 +1,5 @@
-﻿/// <reference path="DependencyObject.ts" />
+﻿/// <reference path="UserLog.ts" />
+/// <reference path="DependencyObject.ts" />
 
 abstract class Control extends DependencyObject {
     protected _parent: any = null;
@@ -25,6 +26,7 @@ abstract class Control extends DependencyObject {
         }
     }
 
+    // Returns the parent DOM element, if any.
     get parent(): any {
         return this._parent;
     }
@@ -67,4 +69,47 @@ abstract class Control extends DependencyObject {
     protected abstract render(e: any): void;
 
     protected onrendered() { }
+
+    public static SendRoutedCommand(sender: HTMLElement, command: string) {
+        let logstring = "[Control.SendRoutedCommand] sender: " + sender.nodeName;
+
+        // extract parameter
+        let parameter = sender["data-parameter"];
+
+        if (parameter) {
+            logstring += " PARAMETER " + parameter["$type"];
+        }
+
+        let handled = false;
+
+        try {
+
+            while (sender) {
+                var c0 = sender["__control"];
+                if (c0) {
+                    let control = c0();
+                    let handler = control["ExecuteRoutedCommand"];
+                    if (handler) {
+                        logstring += " CALLHANDLER " + control["$type"];
+                        if (handler.call(control, command, parameter)) {
+                            logstring += " ==> HANDLED";
+                            handled = true;
+                            break;
+                        }
+                    }
+                }
+
+                sender = sender.parentElement;
+            }
+        }
+        catch (err) {
+            logstring += " ==> ERROR: " + err;
+        }
+
+        if (!handled) {
+            logstring += " ==> NOT HANDLED";
+        }
+
+        UserLog.Trace(logstring);
+    }
 }

@@ -1,42 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Common
 {
     public static class LogMessageExtensions
     {
-        public static ILogMessage WithHeader(this ILogMessage log, string format, params object[] args)
+        public static ILogMessageTemplate WithHeader(this ILogMessageTemplate log, string format, params object[] args)
         {
             log.Header = string.Format(format, args);
             return log;
         }
 
-        public static ILogMessage WithData(this ILogMessage log, object data)
+        public static ILogMessageTemplate WithData(this ILogMessageTemplate log, object data)
         {
             log.AddData(data);
             return log;
         }
 
-        public static ILogMessage WithSeverity(this ILogMessage log, LogSeverity severity)
+        public static ILogMessageTemplate WithEventCode(this ILogMessageTemplate log, object context, string eventcode)
+        {
+            log.EventCode = context.GetType().FullName + "." + eventcode;
+            return log;
+        }
+
+        public static ILogMessageTemplate WithEventCode(this ILogMessageTemplate log, string eventcode)
+        {
+            log.EventCode = eventcode;
+            return log;
+        }
+
+        public static ILogMessageTemplate WithSeverity(this ILogMessageTemplate log, LogSeverity severity)
         {
             log.Severity = severity;
             return log;
         }
 
-        public static ILogMessage WithExceptionData(this ILogMessage log, Exception ex)
+        public static ILogMessageTemplate WithExceptionData(this ILogMessageTemplate log, Exception ex)
         {
             var first = true;
             var sb = new StringBuilder();
             while (null != ex)
             {
-                if (first) first = false;
-                else sb.AppendLine();
+                if (!first) sb.AppendLine("-------------");
 
-                sb.AppendLine("[" + ex.GetType().FullName + "]");
-                sb.AppendLine(ex.ToString());
+                sb.AppendLine("[" + ex.GetType().FullName + "] " + ex.Message);
 
+                if(first) sb.AppendLine(ex.ToString());
+
+                first = false;
                 ex = ex.InnerException;
             }
 
@@ -45,11 +59,17 @@ namespace Common
             return log;
         }
 
-        internal static void SerializeContext(this ILogMessage log)
+        public static ILogMessageTemplate WithSource(this ILogMessageTemplate log, [CallerFilePath] string filename = null, [CallerLineNumber] int line = 0)
+        {
+            log.Source = filename + "(" + line + ")";
+            return log;
+        }
+
+        internal static void SerializeContext(this ILogMessageTemplate log)
         {
         }
 
-        internal static void SerializeContext(this ILogMessage log, IEnumerable<object> context)
+        internal static void SerializeContext(this ILogMessageTemplate log, IEnumerable<object> context)
         {
             var set = new HashSet<object>();
             var list = new List<string>();

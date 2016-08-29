@@ -1,15 +1,22 @@
 ﻿using System.Linq;
 using System.Xml;
+using Common;
 
 namespace GRUML.Model
 {
+    /// <summary>
+    /// Element of a data template or control.
+    /// </summary>
     public abstract class TemplateElement : ContainerElement
     {
         public string Name { get; private set; }
 
         public override bool Load(XmlElement e)
         {
+            // process attributes
             LoadAttributes(e);
+
+            // and the rest
             return base.Load(e);
         }
 
@@ -26,10 +33,18 @@ namespace GRUML.Model
                 {
                     ID = a.Value;
                 }
-                else if(a.Name == "xmlns")
+                else if (a.Name == "xmlns")
                 {
                     // omit
                     continue;
+                }
+                else if (a.Name == "command")
+                {
+                    AddAttribute(new StaticAttribute
+                    {
+                        Name = "onclick",
+                        Value = "Control.SendRoutedCommand(this, " + a.Value.CQuote() + ");"
+                    });
                 }
                 else
                 {

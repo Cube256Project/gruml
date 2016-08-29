@@ -19,9 +19,11 @@ class ObjectBinding extends BindingBase implements IBindingElementParent {
     }
 
     private parsePath(path: string): void {
-        let list = path.split(".");
-        for (let j = 0; j < list.length; ++j) {
-            this._elements[j] = new BindingElement(this, j, list[j]);
+        if (!!path) {
+            let list = path.split(".");
+            for (let j = 0; j < list.length; ++j) {
+                this._elements[j] = new BindingElement(this, j, list[j]);
+            }
         }
     }
 
@@ -54,7 +56,12 @@ class ObjectBinding extends BindingBase implements IBindingElementParent {
     // Returns the cached value of the binding.
     read(): any {
         let el = this._elements;
-        return this.convertSource(el[el.length - 1].value);
+        if (el.length > 0) {
+            return this.convertSource(el[el.length - 1].value);
+        }
+        else {
+            return this.convertSource(this.source);
+        }
     }
 
     write(value: any): void {

@@ -22,9 +22,9 @@ namespace GRUML.Converters
 
         public void Convert(string prop, BindingSyntax s)
         {
-            if (s is Binding)
+            if (s is DataBinding)
             {
-                ConvertDataBinding(prop, (Binding)s);
+                ConvertDataBinding(prop, (DataBinding)s);
             }
             else if (s is StaticResource)
             {
@@ -36,10 +36,11 @@ namespace GRUML.Converters
             }
         }
 
-        public void ConvertDataBinding(string prop, Binding b)
+        public void ConvertDataBinding(string prop, DataBinding b)
         {
             string target;
-            var path = b.Path;
+
+            var path =  new List<string>(null == b.Path ? new string[0] : b.Path.Split('.'));
 
             if (null != b.Element)
             {
@@ -54,15 +55,16 @@ namespace GRUML.Converters
                 target = "this";
 
                 // just prefix the path for that
-                path = "dc." + path;
+                path.Insert(0, "dc");
             }
             else
             {
                 target = "dc";
             }
 
+            var patharg = path.Count > 0 ? path.ToSeparatorList(".").Quote() : "null";
 
-            var source = "new ObjectBinding(" + target + ", " + path.Quote();
+            var source = "new ObjectBinding(" + target + ", " + patharg;
             if (null != b.Converter)
             {
                 source += ", new " + b.Converter + "()";

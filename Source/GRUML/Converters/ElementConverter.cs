@@ -26,7 +26,6 @@ namespace GRUML.Converters
 
         protected virtual void BeginRender()
         {
-            // Writer.WriteLine(prefix + name + "(dc: any, e: any): void {");
             Writer.Indent();
             Writer.WriteLine("let L: any[] = [];");
             Writer.WriteLine("L.unshift(e);");
@@ -47,6 +46,23 @@ namespace GRUML.Converters
         protected void Pop()
         {
             Writer.WriteLine("e = L.shift();");
+        }
+
+        protected void EnterBlock()
+        {
+            Writer.WriteLine("{");
+            Writer.Indent();
+        }
+
+        protected void LeaveBlock()
+        {
+            Writer.UnIndent();
+            Writer.WriteLine("}");
+        }
+
+        protected void WriteComment(string text)
+        {
+            Writer.WriteLine("// " + text);
         }
     }
 }

@@ -6,7 +6,10 @@ namespace GRUML.Model
     {
         public string Location { get; private set; }
 
-        public string FileName {  get { return System.IO.Path.GetFileName(Location); } }
+        public virtual string FileName {  get { return System.IO.Path.GetFileName(Location); } }
+
+        public ExternalScriptElement()
+        { }
 
         public ExternalScriptElement(string path)
         {

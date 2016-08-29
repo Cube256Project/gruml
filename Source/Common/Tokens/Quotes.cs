@@ -8,6 +8,11 @@ namespace Common.Tokens
     public abstract class Quote : Atomic
     {
         public abstract EscapeSequence GetEscapeQuote();
+
+        public virtual bool IsClosingQuote(Quote quote)
+        {
+            return quote.GetType() == GetType();
+        }
     }
 
     public abstract class SingleQuote : Quote
@@ -27,11 +32,17 @@ namespace Common.Tokens
         }
     }
 
+    [RegularExpression(@"b'", 9)]
     public sealed class Base64Quote : SingleQuote
     {
         protected override void SetDefaultText()
         {
             _text = "b'";
+        }
+
+        public override bool IsClosingQuote(Quote quote)
+        {
+            return quote.GetType() == typeof(SimpleSingleQuote);
         }
     }
 

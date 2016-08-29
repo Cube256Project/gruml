@@ -14,7 +14,7 @@ namespace GRUML.Converters
 
         protected override void ConvertOverride()
         {
-            Writer.WriteLine("e.appendChild(document.createTextNode(" + _e.Text.Quote() + "));");
+            Writer.WriteLine("e.appendChild(document.createTextNode(" + _e.Text.CQuote() + "));");
         }
     }
 }

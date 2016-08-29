@@ -4,7 +4,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <OutputPath>..\output</OutputPath>
     <DefineConstants />
-    <ProjectGuid>{4BF9A23B-1BC5-4B1F-A90D-BC5CE85EDEE3}</ProjectGuid>
+    <ProjectGuid>{6A4B6C05-40FF-48C0-9C72-03049EF0C312}</ProjectGuid>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
@@ -16,6 +16,11 @@
     <Reference Include="Newtonsoft.Json.dll">
       <HintPath>..\Packages\Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -29,13 +34,16 @@
     <Compile Include="Common\ILogMessage.cs" />
     <Compile Include="Common\ILogMessageFactory.cs" />
     <Compile Include="Common\Log.cs" />
+    <Compile Include="Common\LogContentConverter.cs" />
     <Compile Include="Common\LogContext.cs" />
+    <Compile Include="Common\LogMessageContent.cs" />
     <Compile Include="Common\LogMessageExtensions.cs" />
     <Compile Include="Common\LogMessageSubmitOptions.cs" />
     <Compile Include="Common\LogPrinterFormat.cs" />
     <Compile Include="Common\LogSeverity.cs" />
     <Compile Include="Common\LogSourceAttribute.cs" />
     <Compile Include="Common/ParserFramework\Predicate.cs" />
+    <Compile Include="Common/ParserFramework\PredicateFactory.cs" />
     <Compile Include="Common/ParserFramework\ReductionRule.cs" />
     <Compile Include="Common/ParserFramework\ReductionRuleCollection.cs" />
     <Compile Include="Common/ParserFramework\ReductionStack.cs" />
@@ -45,7 +53,8 @@
     <Compile Include="Common\Base32Encoding.cs" />
     <Compile Include="Common\ByteArrayExtensions.cs" />
     <Compile Include="Common\ConsoleWriter.cs" />
-    <Compile Include="Common\StreamExtensions.cs" />
+    <Compile Include="Common\FileSystemUtilities.cs" />
+    <Compile Include="Common\GeneratorIgnoreAttribute.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Common\TypeSelector.cs" />
     <Compile Include="Common\UniqueTimeSource.cs" />
@@ -75,11 +84,15 @@
     <Compile Include="Common/Tokenization/Rules\QuoteSuffixRule.cs" />
     <Compile Include="Common/Tokenization/Rules\SeparatorCoercionRule.cs" />
     <Compile Include="Common/Tokenization/Rules\SingleLineCommentSuffixRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\UrlCombinationRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\UrlSeparatorRule.cs" />
+    <Compile Include="Common/Tokenization/Rules\UrlTerminalRule.cs" />
     <Compile Include="Common/Tokenization/RuleSets\BasicRuleSet.cs" />
     <Compile Include="Common/Tokenization/RuleSets\DefaultRuleSet.cs" />
     <Compile Include="Common/Tokenization/RuleSets\MultiLineCommentRuleSet.cs" />
     <Compile Include="Common/Tokenization/RuleSets\QuotedContentRuleSet.cs" />
     <Compile Include="Common/Tokenization/RuleSets\SingleLineCommentRuleSet.cs" />
+    <Compile Include="Common/Tokenization/RuleSets\UrlRuleSet.cs" />
     <Compile Include="Common/Tokenization/RuleSets\XmlRuleSet.cs" />
     <Compile Include="Common/Tokens\Atomic.cs" />
     <Compile Include="Common/Tokens\Brackets.cs" />
@@ -95,50 +108,53 @@
     <Compile Include="Common/Tokens\TokenClasses.cs" />
     <Compile Include="Common/Tokens\Whitespace.cs" />
     <Compile Include="Common/Tokens\XmlMarkup.cs" />
-    <Compile Include="Tools/GRUML\BindingParser.cs" />
-    <Compile Include="Tools/GRUML\DocumentConverter.cs" />
-    <Compile Include="Tools/GRUML\DocumentReader.cs" />
-    <Compile Include="Tools/GRUML\ResourceTag.cs" />
-    <Compile Include="Tools/GRUML/Converters\BindingConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\ControlDefinitionConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\ControlElementConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\DataTemplateConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\ElementConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\HtmlElementConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\ProjectConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\ResourceDictionaryConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\TemplateElementConverter.cs" />
-    <Compile Include="Tools/GRUML/Converters\TextElementConverter.cs" />
-    <Compile Include="Tools/GRUML/Model\Binding.cs" />
-    <Compile Include="Tools/GRUML/Model\BindingSyntax.cs" />
-    <Compile Include="Tools/GRUML/Model\CascadingStyleSheet.cs" />
-    <Compile Include="Tools/GRUML/Model\ClassElement.cs" />
-    <Compile Include="Tools/GRUML/Model\ContainerElement.cs" />
-    <Compile Include="Tools/GRUML/Model\ControlDefinition.cs" />
-    <Compile Include="Tools/GRUML/Model\ControlElement.cs" />
-    <Compile Include="Tools/GRUML/Model\ControlScriptElement.cs" />
-    <Compile Include="Tools/GRUML/Model\DataTemplate.cs" />
-    <Compile Include="Tools/GRUML/Model\DictionaryElement.cs" />
-    <Compile Include="Tools/GRUML/Model\Element.cs" />
-    <Compile Include="Tools/GRUML/Model\ExternalScriptElement.cs" />
-    <Compile Include="Tools/GRUML/Model\HtmlAttribute.cs" />
-    <Compile Include="Tools/GRUML/Model\HtmlElement.cs" />
-    <Compile Include="Tools/GRUML/Model\Include.cs" />
-    <Compile Include="Tools/GRUML/Model\Page.cs" />
-    <Compile Include="Tools/GRUML/Model\Project.cs" />
-    <Compile Include="Tools/GRUML/Model\Resource.cs" />
-    <Compile Include="Tools/GRUML/Model\ResourceDictionary.cs" />
-    <Compile Include="Tools/GRUML/Model\ScriptElement.cs" />
-    <Compile Include="Tools/GRUML/Model\StaticResource.cs" />
-    <Compile Include="Tools/GRUML/Model\TemplateElement.cs" />
-    <Compile Include="Tools/GRUML/Model\TextElement.cs" />
-    <Compile Include="Tools/GRUML/Model\TypeScriptUnit.cs" />
-    <Compile Include="Tools/GRUML/Bindings\AssignmentRule.cs" />
-    <Compile Include="Tools/GRUML/Bindings\BindingSyntaxReductionRule.cs" />
-    <Compile Include="Tools/GRUML/Bindings\BindingSyntaxReductionRules.cs" />
-    <Compile Include="Tools/GRUML/Bindings\ConcatenationRule.cs" />
-    <Compile Include="Tools/GRUML/Bindings\EndRule.cs" />
-    <Compile Include="Tools/GRUML/Bindings\StartRule.cs" />
+    <Compile Include="GRUML\BindingParser.cs" />
+    <Compile Include="GRUML\DocumentConverter.cs" />
+    <Compile Include="GRUML\DocumentReader.cs" />
+    <Compile Include="GRUML\ResourceTag.cs" />
+    <Compile Include="GRUML/Converters\BindingConverter.cs" />
+    <Compile Include="GRUML/Converters\ControlDefinitionConverter.cs" />
+    <Compile Include="GRUML/Converters\ControlElementConverter.cs" />
+    <Compile Include="GRUML/Converters\DataTemplateConverter.cs" />
+    <Compile Include="GRUML/Converters\ElementConverter.cs" />
+    <Compile Include="GRUML/Converters\HtmlElementConverter.cs" />
+    <Compile Include="GRUML/Converters\ProjectConverter.cs" />
+    <Compile Include="GRUML/Converters\ResourceDictionaryConverter.cs" />
+    <Compile Include="GRUML/Converters\TemplateElementConverter.cs" />
+    <Compile Include="GRUML/Converters\TextElementConverter.cs" />
+    <Compile Include="GRUML/Model\BindingSyntax.cs" />
+    <Compile Include="GRUML/Model\CascadingStyleSheet.cs" />
+    <Compile Include="GRUML/Model\ClassElement.cs" />
+    <Compile Include="GRUML/Model\CommandBinding.cs" />
+    <Compile Include="GRUML/Model\ContainerElement.cs" />
+    <Compile Include="GRUML/Model\ControlDefinition.cs" />
+    <Compile Include="GRUML/Model\ControlElement.cs" />
+    <Compile Include="GRUML/Model\ControlScriptElement.cs" />
+    <Compile Include="GRUML/Model\DataBinding.cs" />
+    <Compile Include="GRUML/Model\DataTemplate.cs" />
+    <Compile Include="GRUML/Model\DictionaryElement.cs" />
+    <Compile Include="GRUML/Model\Element.cs" />
+    <Compile Include="GRUML/Model\EventBinding.cs" />
+    <Compile Include="GRUML/Model\ExternalScriptElement.cs" />
+    <Compile Include="GRUML/Model\HtmlAttribute.cs" />
+    <Compile Include="GRUML/Model\HtmlElement.cs" />
+    <Compile Include="GRUML/Model\Include.cs" />
+    <Compile Include="GRUML/Model\Page.cs" />
+    <Compile Include="GRUML/Model\Project.cs" />
+    <Compile Include="GRUML/Model\Resource.cs" />
+    <Compile Include="GRUML/Model\ResourceDictionary.cs" />
+    <Compile Include="GRUML/Model\ScriptElement.cs" />
+    <Compile Include="GRUML/Model\StaticResource.cs" />
+    <Compile Include="GRUML/Model\StyleSheetReference.cs" />
+    <Compile Include="GRUML/Model\TemplateElement.cs" />
+    <Compile Include="GRUML/Model\TextElement.cs" />
+    <Compile Include="GRUML/Model\TypeScriptUnit.cs" />
+    <Compile Include="GRUML/Bindings\AssignmentRule.cs" />
+    <Compile Include="GRUML/Bindings\BindingSyntaxReductionRule.cs" />
+    <Compile Include="GRUML/Bindings\BindingSyntaxReductionRules.cs" />
+    <Compile Include="GRUML/Bindings\ConcatenationRule.cs" />
+    <Compile Include="GRUML/Bindings\EndRule.cs" />
+    <Compile Include="GRUML/Bindings\StartRule.cs" />
     <EmbeddedResource Include="Tools\GRUML\Library\BindingBase.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\BindingElement.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\BindingObject.ts" />
@@ -149,9 +165,10 @@
     <EmbeddedResource Include="Tools\GRUML\Library\Delegate.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\DependencyObject.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\DOMBinding.ts" />
+    <EmbeddedResource Include="Tools\GRUML\Library\DomNodeEnumerator.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\Interfaces.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\ItemsControl.ts" />
-    <Compile Include="Tools/GRUML\Library.cs" />
+    <Compile Include="GRUML\Library.cs" />
     <EmbeddedResource Include="Tools\GRUML\Library\Library.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\ObjectBinding.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\ObservableCollection.ts" />
@@ -161,8 +178,8 @@
     <EmbeddedResource Include="Tools\GRUML\Library\ResourceDictionary.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\TypeSystem.ts" />
     <EmbeddedResource Include="Tools\GRUML\Library\UserLog.ts" />
-    <Compile Include="Tools/GRUML\Utility.cs" />
-    <Compile Include="Tools/GRUML/Configuration\TypeScriptConfiguration.cs" />
+    <Compile Include="GRUML\Utility.cs" />
+    <Compile Include="GRUML/Configuration\TypeScriptConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.grumlc.cs" />

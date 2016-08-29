@@ -3,7 +3,7 @@
   <head>
     <title></title>
     <z:style />
-    <script src="bundle.js" type="text/javascript"> </script>
+    <z:script />
     <script type="text/javascript">
       function bodyloaded() {
       UserLog.Trace('bodyloaded.');

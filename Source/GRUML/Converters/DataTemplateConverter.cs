@@ -15,6 +15,7 @@ namespace GRUML.Converters
         {
             Writer.WriteLine("// [template] " + _template.SequenceNumber);
 
+            // emit function representing the data-template
             Writer.WriteLine("function " + _template.UniqueName + "(dc: any, e: any): void {");
 
             BeginRender();

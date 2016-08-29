@@ -11,6 +11,7 @@ namespace Common
         output = 50,
         echo = 70,
         debug = 100,
+        security = 160,
         information = 200,
         success = 250,
         warning = 300,

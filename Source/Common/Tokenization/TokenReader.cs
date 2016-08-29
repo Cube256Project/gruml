@@ -40,7 +40,7 @@ namespace Common.Tokenization
         public string BaseURI { get; set; }
 
         public TokenizerSettings Settings { get; set; }
-        
+
         #endregion
 
         #region Construction
@@ -54,10 +54,15 @@ namespace Common.Tokenization
 
         #region Diagnostics
 
-        [Conditional("VERBOSE")]
-        private void Trace(string format, params object[] args)
+        public bool Verbose = false;
+
+        // [Conditional("VERBOSE")]
+        internal void Trace(string format, params object[] args)
         {
-            Log.Trace(format, args);
+            if (Verbose)
+            {
+                Log.Trace(format, args);
+            }
         }
 
         #endregion
@@ -206,7 +211,7 @@ namespace Common.Tokenization
             {
                 var result = _result.Dequeue();
 
-                if(Settings.OmitWhitespace && result is Whitespace)
+                if (Settings.OmitWhitespace && result is Whitespace)
                 {
                     continue;
                 }
@@ -227,7 +232,7 @@ namespace Common.Tokenization
             // switch to regular expression specified by the rules
             _expression = rules.Expression;
 
-            Trace("installed rules [{0}].", rules.GetType().Name);
+            Trace("installed rules [{0}] expression: {1}", rules.GetType().Name, _expression);
         }
     }
 }

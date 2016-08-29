@@ -1,4 +1,5 @@
 ﻿using Common.ParserFramework;
+using Common.Tokenization.RuleSets;
 using Common.Tokens;
 using System.Linq;
 
@@ -22,13 +23,27 @@ namespace Common.Tokenization.Rules
             if(s.MatchRight(Pattern))
             {
                 // separator priority must be greater equal reduction.
-                var separator = s.Get<Separator>(-2);
-                var lapr = ((Token)la).GetSeparatorPriority();
+                var separatortoken=s.Get<Separator>(-2);
+                var separator = separatortoken.GetSeparatorPriority();
+                var lookahead = ((Token)la).GetSeparatorPriority();
 
-                if (separator.GetSeparatorPriority() >= lapr)
+                var left = s.Get<Token>(-3);
+
+                // combine if previous separator priority is higher than the lookahead
+                var combine = separator >= lookahead;
+
+                if (combine)
                 {
-                    var replace = separator.CombineTokens(s.Skip(s.Count - 3).OfType<Token>());
+                    var replace = separatortoken.CombineTokens(s.Skip(s.Count - 3).OfType<Token>());
                     s.Replace(3, replace);
+
+                    if(replace is UrlString)
+                    {
+                        // push rules
+                        s.PushRules(new UrlRuleSet());
+                        s.EndReduce();
+                    }
+
                     return true;
                 }
             }

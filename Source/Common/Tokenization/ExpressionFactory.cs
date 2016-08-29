@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace Common.Tokenization
 {
+    /// <summary>
+    /// Constructs a regular expression based on a set of token types.
+    /// </summary>
     public static class ExpressionFactory
     {
         public static Regex ConstructExpression(IEnumerable<Type> tokentypes)

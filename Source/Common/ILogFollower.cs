@@ -1,7 +1,9 @@
 ﻿
+using System;
+
 namespace Common
 {
-    public interface ILogFollower 
+    public interface ILogFollower
     {
         bool IsExclusive { get; }
 

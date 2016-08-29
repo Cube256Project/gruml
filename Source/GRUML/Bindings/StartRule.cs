@@ -26,7 +26,7 @@ namespace GRUML.Bindings
                 switch(kind)
                 {
                     case "binding":
-                        replace = new Binding();
+                        replace = new DataBinding();
                         break;
 
                     case "resource":
@@ -34,8 +34,8 @@ namespace GRUML.Bindings
                         break;
 
                     default:
-                        // assume binding name
-                        replace = new Binding { Path = kind };
+                        // assume binding name (case sensitive name)
+                        replace = new DataBinding { Path = id.Value };
                         break;
                 }
 

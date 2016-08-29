@@ -6,6 +6,7 @@ namespace Common
     /// <summary>
     /// Implements Base32 encoding according to RFC 4648.
     /// </summary>
+    [GeneratorIgnore]
     public class Base32Encoding
     {
         #region Private

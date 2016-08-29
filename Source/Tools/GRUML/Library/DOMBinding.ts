@@ -24,7 +24,7 @@ class DOMBinding extends BindingBase {
         let p = this._prop;
         let handled = false;
 
-        let logstring: string = "[DOM] " + e.tagName + "." + p + ": ";
+        let logstring: string = "[DOM] " + e.tagName + "." + p + " = " + value + ": ";
 
         try {
 
@@ -64,15 +64,23 @@ class DOMBinding extends BindingBase {
                 }
             }
 
-            logstring += "ATTRIBUTE; ";
-
             // at this point, control properties are ruled out
             // so it's either a 'special property' or an attribute.
-            if (p == "text") {
+            if (0 == p.indexOf("data-")) {
+                // 27CLJ3C7VA: data- attribute on object
+                e[p] = value;
+                handled = true;
+
+                logstring += "DATA; ";
+            }
+            else if (p == "text") {
 
                 // special case: text property
                 while (!!e.firstChild) e.removeChild(e.firstChild);
                 e.appendChild(document.createTextNode(value));
+
+                logstring += "TEXT; ";
+
                 handled = true;
             }
             else if (p == "enabled") {
@@ -82,18 +90,22 @@ class DOMBinding extends BindingBase {
                 else {
                     e.setAttribute("disabled", !value);
                 }
+                logstring += "DISABLED; ";
                 handled = true;
             }
             else if (p == "visibility") {
-                if (!!value) {
+                var visible = !!value;
+                if (visible) {
                     e.style.display = "block";
                 }
                 else {
                     e.style.display = "none";
                 }
+                logstring += "STYLE; visible=" + visible;
                 handled = true;
             }
             else {
+                logstring += "ATTRIBUTE; ";
                 e.setAttribute(p, value);
                 handled = true;
             }

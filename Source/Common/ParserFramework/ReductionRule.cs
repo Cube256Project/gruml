@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-
-namespace Common.ParserFramework
+﻿namespace Common.ParserFramework
 {
     /// <summary>
     /// A reduction rule operating on a <see cref="ReductionStack"/>.
     /// </summary>
-    public abstract class ReductionRule
+    public abstract class ReductionRule : PredicateFactory
     {
         #region Diagnostics
 
@@ -21,29 +18,5 @@ namespace Common.ParserFramework
         /// <param name="la">The current look-ahead symbol.</param>
         /// <returns>True if the rule was applied, false otherwise.</returns>
         public abstract bool Apply(ReductionStack s, object la);
-
-        #region Predicate Factories
-
-        protected static Predicate MatchAny()
-        {
-            return new Predicate(r => true);
-        }
-
-        protected static Predicate ExactType(Type type)
-        {
-            return new Predicate(r => r.GetType() == type);
-        }
-
-        protected static Predicate ClassType(Type type)
-        {
-            return new Predicate(r => type.IsAssignableFrom(r.GetType()));
-        }
-
-        protected static Predicate ClassTypes(params Type[] types)
-        {
-            return new Predicate(r => types.Any(t => t.IsAssignableFrom(r.GetType())));
-        }
-
-        #endregion
     }
 }

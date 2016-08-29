@@ -1,25 +1,35 @@
-
 // Simple trace class.
 class UserLog {
-    static _callback: Function = null;
+    static _configured: boolean = false;
+    static _callback: Function[] = [];
 
-    // Attaches the callbackfunction for trace output.
+    // Attaches a callback-function for trace output.
     static Configure(callback: Function) {
-        UserLog._callback = callback;
+        if (!!callback) {
+            let l = UserLog._callback;
+            if (0 > l.indexOf(callback)) {
+                l.push(callback);
+            }
+        }
     }
 
     static Trace(s: string): void {
+        if (!UserLog._configured) UserLog.Configure(null);
+
         console.log(s);
-        if (!!UserLog._callback) {
-            UserLog._callback(s);
-        }
+
+        let l = UserLog._callback;
+        for (let j = 0; j < l.length; ++j) {
+            try {
+                l[j](s);
+            }
+            catch (e)
+            { }
+        } 
     }
 
     static Warning(s: string): void {
-        console.log(s);
-        if (!!UserLog._callback) {
-            UserLog._callback(s);
-        }
+        UserLog.Trace("WARNING: " + s);
     }
 
 }

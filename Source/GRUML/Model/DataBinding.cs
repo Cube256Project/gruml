@@ -5,15 +5,19 @@ using System;
 namespace GRUML.Model
 {
     /// <summary>
-    /// A binding object.
+    /// A data element binding.
     /// </summary>
-    public class Binding : BindingSyntax
+    public class DataBinding : BindingSyntax
     {
+        #region Elements
+
         public string Path;
 
         public object Converter;
 
         public string Element;
+
+        #endregion
 
         public override void SetProperty(string name, Token value)
         {
