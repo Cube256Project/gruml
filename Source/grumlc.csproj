@@ -4,7 +4,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <OutputPath>..\output</OutputPath>
     <DefineConstants />
-    <ProjectGuid>{843DD1C5-A9C0-49A9-A61F-CB1F3D3D2023}</ProjectGuid>
+    <ProjectGuid>{76549D6B-2312-4E8A-AC1A-4FD1F4164F42}</ProjectGuid>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
