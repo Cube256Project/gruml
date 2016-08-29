@@ -1,2 +1,2 @@
 using System.Reflection;
-[assembly: AssemblyVersion("1.0.1631.4")]
+[assembly: AssemblyVersion("1.0.1631.6")]
